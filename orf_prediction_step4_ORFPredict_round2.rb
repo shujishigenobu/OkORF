@@ -2,7 +2,7 @@
 $transcript_file = "Trinity_Mono_130215.fasta"
 $min_len = 50 #aa
 $len_retain_long_orfs = 900 #bp
-$basefreqf = "Trinity_Mono_130215.fasta.base_freqs.dat"
+$basefreqf = "#{$transcript_file}.base_freqs.dat"
 $cds_for_train = "orfs_for_round2_train.cds"
 # $pep_for_train = $cds_for_train.sub(/\.cds$/, ".pep")
 #===
@@ -48,6 +48,9 @@ system cmd
 # reuse 1st round data
 
 basefreqf = $basefreqf
+unless File.exist?(basefreqf)
+  raise "\nERROR: #{basefreqf} not found\n"
+end
 
 ### Calculate hexamer scores from training sequences
 
