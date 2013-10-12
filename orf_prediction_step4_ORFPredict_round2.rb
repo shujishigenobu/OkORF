@@ -36,7 +36,7 @@ $scriptdir = File.dirname(__FILE__)
 outprefix = "predicted2_orfs"
 cmd = "perl #{$scriptdir}/capture_all_ORFs.pl #{$transcript_file} #{outprefix} #{$min_len}"
 puts cmd
-#system(cmd)
+system(cmd)
 
 ### Remove redundancy 
 
@@ -45,29 +45,29 @@ output = "#{input}.rmdup"
 cmd = "ruby #{$scriptdir}/remove_duplicates_in_fastaf.rb #{input} > #{output}"
 puts cmd 
 
-#system(cmd)
+system(cmd)
 
 idlist = "#{output}.ids"
 cmd = "fast ids #{output} > #{idlist}"
 puts cmd
-#system cmd
+system cmd
 
 fasta = "predicted2_orfs.pep"
 output = "#{fasta}.rmdup"
 cmd = "ruby #{$scriptdir}/get_fasta_entries_from_idlist.rb #{fasta} #{idlist} > #{output}"
 puts cmd
-#system cmd
+system cmd
 
 input_gff = "predicted2_orfs.gff3"
 output_gff = "#{input_gff}.rmdup"
 cmd = "ruby #{$scriptdir}/get_gff_entries_from_idlist.rb #{input_gff} #{idlist} > #{output_gff}"
 puts cmd
-#system cmd
+system cmd
 
 ### Calculate base prob
 # reuse 1st round data
 
-p basefreqf = $basefreqf
+basefreqf = $basefreqf
 unless File.exist?(basefreqf)
   raise "\nERROR: #{basefreqf} not found\n"
 end
