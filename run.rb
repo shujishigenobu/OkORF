@@ -13,7 +13,7 @@ File.open(runscript1, "w"){|o| o.puts cmd1}
 STDERR.puts "#{runscript1} generated"
 puts cmd1
 
-cmd2 = "ruby #{y['libdir']}/orf_prediction_step2_BLASTPref.rb -i good_orf_candidates.pep -d #{y['blastdb_train']}"
+cmd2 = "ruby #{y['libdir']}/orf_prediction_step2_BLASTPref.rb -i good_orf_candidates.pep -d #{y['blastdb_train']} -c #{y['ncpu']} "
 runscript2 = "run_script_2.sh"
 File.open(runscript2, "w"){|o| o.puts cmd2}
 STDERR.puts "#{runscript2} generated"
@@ -43,7 +43,7 @@ pj = y['project']
 
 script = <<EOS
 qsub -v PATH -N Ok1_#{pj} run_script_1.sh
-qsub -v PATH -N Ok2_#{pj} -hold_jid Ok1_#{pj}  run_script_2.sh
+qsub -v PATH -N Ok2_#{pj} -hold_jid Ok1_#{pj}  -l nc=#{y['ncpu']} run_script_2.sh
 qsub -v PATH -N Ok3_#{pj} -hold_jid Ok2_#{pj}  run_script_3.sh
 qsub -v PATH -N Ok4_#{pj} -hold_jid Ok3_#{pj}  run_script_4.sh
 EOS

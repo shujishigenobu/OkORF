@@ -16,5 +16,5 @@ pep_min_len: 50  #aa
 len_retain_long_orfs: 900 #bp
 
 libdir: ./OkORF
-
+ncpu: 8
 
