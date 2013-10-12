@@ -1,10 +1,32 @@
 #=== conf ===
 
-$transcript_file = "Trinity_Pran_all_130417.fa"
+# $transcript_file = "Trinity_Pran_all_130417.fa"
 
-$num_top_longORFs_for_train = 500
+
+# $num_top_longORFs_for_train = 500
 
 #===
+
+### Parse command-line options
+
+require 'optparse'
+opt = OptionParser.new
+opt.on('-t', '--transcript FASTA', 'transcript file to search ORFs (in fasta format) [required]') {|v| $transcript_file = v}
+opt.on('-n', '--ntop NUM', 'number of top longORFs for train [default:500]') {|v| $num_top_longORFs_for_train = v}
+opt.on('-h', '--help', 'show this message') {
+  puts opt; exit 
+}
+
+opt.parse!(ARGV)
+
+unless $transcript_file
+  raise "\nError: Required option missing.\n"
+end
+
+## set default value if options are not specified
+$num_top_longORFs_for_train = 500 unless $min_len
+
+### Start analysis
 
 $scriptdir = File.dirname(__FILE__)
 

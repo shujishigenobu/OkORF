@@ -1,10 +1,32 @@
 #=== config
 
-$blastout = "good_orf_candidates.pep.vs.RefSeq_Ath_Osa.pep.blastp.fmt7c.txt"
-$cdsf = "good_orf_candidates.cds"
-$pepf = $cdsf.sub(/\.cds$/, ".pep")
+# $blastout = "good_orf_candidates.pep.vs.RefSeq_Ath_Osa.pep.blastp.fmt7c.txt"
+# $cdsf = "good_orf_candidates.cds"
+# $pepf = $cdsf.sub(/\.cds$/, ".pep")
 
 #===
+
+### Parse command-line options
+require 'optparse'
+opt = OptionParser.new
+opt.on('-b', '--blastout BLASTOUT', 'blast result in format 7 [required]') {|v| $blastout = v}
+opt.on('-c', '--cds CDS', 'CDS file in the 1st round ORF prediction in fasta format [required]') {|v|
+  $cdsf = v
+}
+opt.on('-p', '--pep PEP', 'translated CDS file in the 1st round ORF prediction in fasta format [required]') {|v|
+  $pepf = v
+}
+opt.on('-h', '--help', 'show this message'){
+puts opt; exit
+}
+ 
+opt.parse!(ARGV)
+
+unless $blastout || $pepf || $cdsf
+  raise "\nError: Required option missing.\n"
+end
+
+### Start analysis
 
 $scriptdir = File.dirname(__FILE__)
 

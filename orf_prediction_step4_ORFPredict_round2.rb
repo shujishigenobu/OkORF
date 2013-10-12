@@ -1,12 +1,32 @@
 #=== config
-$transcript_file = "Trinity_Mono_130215.fasta"
-$min_len = 50 #aa
-$len_retain_long_orfs = 900 #bp
-$basefreqf = "#{$transcript_file}.base_freqs.dat"
-$cds_for_train = "orfs_for_round2_train.cds"
-# $pep_for_train = $cds_for_train.sub(/\.cds$/, ".pep")
+# $transcript_file = "Trinity_Mono_130215.fasta"
+# $min_len = 50 #aa
+# $len_retain_long_orfs = 900 #bp
+# $basefreqf = "#{$transcript_file}.base_freqs.dat"
+# $cds_for_train = "orfs_for_round2_train.cds"
 #===
 
+### Parse command-line options
+require 'optparse'
+opt = OptionParser.new
+opt.on('-t', '--transcript FASTA', 'transcript file to search ORFs (in fasta format) [required]') {|v|
+  $transcript_file = v}
+opt.on('-m', '--min [MIN_LEN]', 'min aa length to predict [default:50]') {|v| $min_len = v.to_i}
+opt.on('-b', '--basefreq FILE', 'base frequence file gerenated by previous round of prediction [required]'){|v|
+  $basefreqf = v}
+opt.on('-n', '--cdstrain FASTA', 'cds for training in FASTA format [required]'){|v| $cds_for_train = v}
+opt.on('-r', '--retainlen [LENGTH]', 'length to retain long ORFs (bp) [default:900]'){|v| $len_retain_long_orfs = v.to_i}
+opt.on('-h', '--help', 'show this message'){
+  puts opt; exit
+}
+
+opt.parse!(ARGV)
+unless $transcript_file || $basefreq || $cds_for_train
+  raise "\nError: Required option missing.\n"
+end
+
+$min_len = 50 unless $min_len
+$len_retain_len_orfs = 900 unless $len_retain_len_orfs
 
 $scriptdir = File.dirname(__FILE__)
 
@@ -16,7 +36,7 @@ $scriptdir = File.dirname(__FILE__)
 outprefix = "predicted2_orfs"
 cmd = "perl #{$scriptdir}/capture_all_ORFs.pl #{$transcript_file} #{outprefix} #{$min_len}"
 puts cmd
-system(cmd)
+#system(cmd)
 
 ### Remove redundancy 
 
@@ -25,29 +45,29 @@ output = "#{input}.rmdup"
 cmd = "ruby #{$scriptdir}/remove_duplicates_in_fastaf.rb #{input} > #{output}"
 puts cmd 
 
-system(cmd)
+#system(cmd)
 
 idlist = "#{output}.ids"
 cmd = "fast ids #{output} > #{idlist}"
 puts cmd
-system cmd
+#system cmd
 
 fasta = "predicted2_orfs.pep"
 output = "#{fasta}.rmdup"
 cmd = "ruby #{$scriptdir}/get_fasta_entries_from_idlist.rb #{fasta} #{idlist} > #{output}"
 puts cmd
-system cmd
+#system cmd
 
 input_gff = "predicted2_orfs.gff3"
 output_gff = "#{input_gff}.rmdup"
 cmd = "ruby #{$scriptdir}/get_gff_entries_from_idlist.rb #{input_gff} #{idlist} > #{output_gff}"
 puts cmd
-system cmd
+#system cmd
 
 ### Calculate base prob
 # reuse 1st round data
 
-basefreqf = $basefreqf
+p basefreqf = $basefreqf
 unless File.exist?(basefreqf)
   raise "\nERROR: #{basefreqf} not found\n"
 end
