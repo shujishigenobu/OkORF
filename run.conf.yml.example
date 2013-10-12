@@ -2,15 +2,14 @@
 # OkORF exec conf
 #
 
-project: n12740_Dpul
-#project: test
+project: Dpul_131012
 
 transcript_file: Trinity_Dpul_130926dn.fa
-#transcript_file: test.fa
 
 num_top_longORFs_for_train: 500
 
 blastdb_train: /home/DB/local/arth_refseq7_90/arth_refseq7.cdhit90.pep
+# blastdb_train: /home/DB/local/sprot90/uniprot_sprot.cdhit90.fasta
 
 pep_min_len: 50  #aa
 len_retain_long_orfs: 900 #bp
