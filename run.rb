@@ -36,7 +36,9 @@ File.open(runscript4, "w"){|o| o.puts cmd4}
 STDERR.puts "#{runscript4} generated"
 puts cmd4
 
-### rename outputs
+### script 5 : rename outputs
+runscript5 = "run_script_5.sh"
+o = File.open(runscript5, "w")
 pj = y['project']
 newname_base = "ORF_#{pj}"
 
@@ -46,9 +48,9 @@ good_orf_candidates2.eclipsed_orfs_removed.gff3
 good_orf_candidates2.eclipsed_orfs_removed.bed
 }.each do |f|
   newname = f.sub(/^good_orf_candidates2.eclipsed_orfs_removed/, newname_base)
-  File.symlink(f, newname)
+  o.puts "ln -s #{f} #{newname}"
 end
-
+o.close
 
 ###
 # generate SGE submission script
@@ -60,6 +62,7 @@ qsub -v PATH -N Ok1_#{pj} run_script_1.sh
 qsub -v PATH -N Ok2_#{pj} -hold_jid Ok1_#{pj}  -l nc=#{y['ncpu']} run_script_2.sh
 qsub -v PATH -N Ok3_#{pj} -hold_jid Ok2_#{pj}  run_script_3.sh
 qsub -v PATH -N Ok4_#{pj} -hold_jid Ok3_#{pj}  run_script_4.sh
+qsub -v PATH -N Ok5_#{pj} -hold_jid Ok4_#{pj}  run_script_5.sh
 EOS
 
 ofile = "sge_submit_#{pj}.sh"
