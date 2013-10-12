@@ -36,6 +36,20 @@ File.open(runscript4, "w"){|o| o.puts cmd4}
 STDERR.puts "#{runscript4} generated"
 puts cmd4
 
+### rename outputs
+pj = y['project']
+newname_base = "ORF_#{pj}"
+
+%w{ good_orf_candidates2.eclipsed_orfs_removed.cds
+good_orf_candidates2.eclipsed_orfs_removed.pep
+good_orf_candidates2.eclipsed_orfs_removed.gff3
+good_orf_candidates2.eclipsed_orfs_removed.bed
+}.each do |f|
+  newname = f.sub(/^good_orf_candidates2.eclipsed_orfs_removed/, newname_base)
+  File.symlink(f, newname)
+end
+
+
 ###
 # generate SGE submission script
 
