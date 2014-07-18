@@ -1,0 +1,26 @@
+#
+# OkORF exec conf
+#
+
+project: okorftest
+
+transcript_file: test.fa
+
+num_top_longORFs_for_train: 500
+
+blastdb_train: /home/DB/local/arth_refseq7_90/arth_refseq7.cdhit90.pep
+# blastdb_train: /home/DB/local/sprot90/uniprot_sprot.cdhit90.fasta
+
+pep_min_len: 50  #aa
+len_retain_long_orfs: 900 #bp
+
+libdir: ./OkORF
+ncpu: 8
+
+rescue_blastdb:
+- /home/DB/public/processed/AphidBase/blastdb/aphidbase_2.1_pep_with_product.fasta
+- /home/DB/local/arth_refseq7_90/arth_refseq7.cdhit90.pep
+
+pfamdb: /home/shige/bio/Applications/interproscan-5.4-47.0/data/pfam/27.0/Pfam-A.hmm
+
+pfam_ncpu: 8
