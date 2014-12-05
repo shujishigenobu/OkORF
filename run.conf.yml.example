@@ -2,9 +2,9 @@
 # OkORF exec conf
 #
 
-project: Dpul_131012
+project: TrinityCpun140730k1
 
-transcript_file: Trinity_Dpul_130926dn.fa
+transcript_file: Trinity_Cpun_140730k1.fa
 
 num_top_longORFs_for_train: 500
 
@@ -17,3 +17,10 @@ len_retain_long_orfs: 900 #bp
 libdir: ./OkORF
 ncpu: 8
 
+rescue_blastdb:
+- /home/shige/Projects/n11723-MiuraG/Data/ZnevGenome/blastdb/Znev.OGS.v2.2.pep
+- /home/DB/local/arth_refseq7_90/arth_refseq7.cdhit90.pep
+
+pfamdb: /home/shige/bio/Applications/interproscan-5.4-47.0/data/pfam/27.0/Pfam-A.hmm
+
+pfam_ncpu: 8
