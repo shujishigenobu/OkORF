@@ -117,6 +117,18 @@ merged.pep
 end
 o.close
 
+### script 11 : remove redundancy
+runscript11 = "run_script_11.sh"
+o = File.open(runscript11, "w")
+input_cds = "ORF_#{y['project']}.cds"
+outf_base = "ORF_#{y['project']}.rmdup"
+o.puts "sh OkORF/run_cdhit_cds_local_p2.sh #{input_cds} #{outf_base}.cds"
+o.puts "fast ids #{outf_base}.cds > #{outf_base}.cds.ids"
+o.puts "ruby OkORF/get_gff_entries_from_idlist.rb #{input_cds.sub(/cds$/,'gff3')} #{outf_base}.cds.ids > #{outf_base}.gff3 "
+o.puts "fast translate #{outf_base}.cds > #{outf_base}.pep "
+o.close
+
+STDERR.puts "#{runscript11} generated"
 
 
 ###
@@ -149,6 +161,8 @@ rnames << rname
 script << "qsub -v PATH -N Ok9_#{pj} -hold_jid #{rnames.join(',')} run_script_9.sh \n"
 
 script << "qsub -v PATH -N Ok10_#{pj} -hold_jid Ok9_#{pj} run_script_10.sh \n"
+
+script << "qsub -v PATH -N Ok11_#{pj} -hold_jid Ok10_#{pj} run_script_11.sh \n"
 
 ofile = "sge_submit_#{pj}.sh"
 File.open(ofile, "w"){|o| o.puts script}

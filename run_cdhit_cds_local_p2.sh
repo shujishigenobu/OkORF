@@ -2,10 +2,10 @@
 #$ -S /bin/bash
 #$ -cwd
  
-QUERY=good_orf_candidates2.eclipsed_orfs_removed.cds
+QUERY=$1
+OUTF=$2
 
 IDENT=0.97
-OUTF=`basename $QUERY .fa`.cdest"${IDENT/./}".aS70aL00.fa
 
 echo  $OUTF
 
